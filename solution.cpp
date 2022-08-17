@@ -11,7 +11,9 @@ void solve();
 int32_t main()
 {
     int tc = 1;
-    fastio;
+    #ifndef LOCAL
+        fastio;
+    #endif
     #ifdef MULTITC
         cin>>tc;
     #endif
@@ -19,7 +21,6 @@ int32_t main()
         solve();
 }
 //saigo nankade sonna yume watashi tsuburarinn..
-
 
 void solve()
 {

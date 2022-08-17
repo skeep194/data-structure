@@ -7,6 +7,7 @@
             "command": "/usr/bin/g++",
             "args": [
                 "-std=c++17",
+                "-D LOCAL",
                 "-g",
                 "${file}",
                 "-o",
@@ -32,6 +33,7 @@
             "command": "/usr/bin/g++",
             "args": [
                 "-std=c++17",
+                "-D LOCAL",
                 "-g",
                 "${file}",
                 "-o",
