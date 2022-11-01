@@ -1,12 +1,12 @@
 #include <bits/stdc++.h>
 using namespace std;
 #define fastio cin.tie(0)->sync_with_stdio(0);
-typedef __int128_t i128;
+// typedef __int128_t i128;
 typedef int64_t i64;
 typedef int32_t i32;
 template<typename T>
 inline T midpoint(const T& a, const T& b) { return a+(b-a)/2; }
-// #define MULTITC
+#define MULTITC
 #define endl '\n'
 // #define int long long
 void solve(int tc);
@@ -26,5 +26,5 @@ int32_t main()
 
 void solve(int tc)
 {
-
+    
 }

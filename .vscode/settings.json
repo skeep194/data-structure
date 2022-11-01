@@ -5,6 +5,7 @@
         "vector": "cpp",
         "iostream": "cpp",
         "tuple": "cpp",
-        "complex": "cpp"
+        "complex": "cpp",
+        "iomanip": "cpp"
     }
 }
