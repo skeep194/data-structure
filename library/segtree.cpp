@@ -16,6 +16,59 @@ int sum(int a, int b, vector<int>& segtree)
     return res;
 }
 
+template<typename T>
+struct segmentTree
+{
+    vector<T> segtree;
+    function<T(T, T)> sum;
+
+    segmentTree(int n, function<T(T, T)> mergeFunction) : segtree(n*2+3), sum(mergeFunction) {}
+
+    void update(int i, T k)
+    {
+        i++;
+        for(segtree[i+=segtree.size()/2] = k; i > 1; i >>= 1)
+        {
+            segtree[i>>1] = sum(segtree[i], segtree[i^1]);
+        }
+    }
+
+    pair<T, bool> query(int a, int b)
+    {
+        a++;
+        b += 2;
+        bool zero = true;
+        T res = T();
+        for(a+=segtree.size()/2,b+=segtree.size()/2;a<b;a>>=1,b>>=1) {
+            if(a&1)
+            {
+                if(zero)
+                {
+                    res = segtree[a++];
+                    zero = false;
+                }
+                else
+                {
+                    res = sum(res, segtree[a++]);
+                }
+            }
+            if(b&1)
+            {
+                if(zero)
+                {
+                    res = segtree[--b];
+                    zero = false;
+                }
+                else
+                {
+                    res = sum(res, segtree[--b]);
+                }
+            }
+        }
+        return make_pair(res, zero);
+    }
+};
+
 
 template<typename T>
 struct SegmentTreeLazy

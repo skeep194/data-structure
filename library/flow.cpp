@@ -9,10 +9,10 @@ struct MCMF {
 
     MCMF(int _n): graph(_n) {}
 
-    void addEdge(int here, int to, int capacity, int cost)
+    void addEdge(int here, int to, int capacity, int cost, bool undirected = false)
     {
         edge* h = new edge(to, capacity, cost);
-        edge* t = new edge(here, 0, -cost);
+        edge* t = new edge(here, undirected ? capacity : 0, -cost);
         h->rev = t;
         t->rev = h;
         graph[here].push_back(h);
@@ -28,7 +28,7 @@ struct MCMF {
             parents[source] = {source, source};
             queue<int> q;
             q.push(source);
-            vector<int> dist(graph.size(), INF);
+            vector<int> dist(graph.size(), 1e15);
             dist[source] = 0;
             vector<bool> inQueue(graph.size(), false);
             inQueue[source] = true;
@@ -73,5 +73,88 @@ struct MCMF {
             }
         }
         return {maxFlow, minCost};
+    }
+};
+
+struct Dinic
+{
+    int source, sink;
+    vector<vector<int>> capacitys, graph;
+    vector<int> level, work;
+
+    void setFlow(int _source, int _sink)
+    {
+        source = _source;
+        sink = _sink;
+    }
+
+    Dinic(int n) : capacitys(n, vector<int>(n)), graph(n), level(n, -1), work(n) {}
+
+    void addEdge(int a, int b, int capacity, bool undirected=false)
+    {
+        capacitys[a][b] = capacity;
+        if(undirected) capacitys[b][a] = capacity;
+        graph[a].push_back(b);
+        graph[b].push_back(a);
+    }
+
+    bool bfs()
+    {
+        queue<int> q;
+        q.push(source);
+        fill(level.begin(), level.end(), -1);
+        level[source] = 0;
+        while(!q.empty())
+        {
+            int here = q.front();
+            q.pop();
+            for(auto to : graph[here])
+            {
+                if(level[to] == -1 && capacitys[here][to] > 0)
+                {
+                    q.push(to);
+                    level[to] = level[here] + 1;
+                }
+            }
+        }
+        return level[sink] != -1;
+    }
+
+    int dfs(int here, int flow)
+    {
+        if(here == sink) return flow;
+        for(int& i = work[here];i < graph[here].size();++i)
+        {
+            int to = graph[here][i];
+            int c = capacitys[here][to];
+            if(c > 0 && level[here] + 1 == level[to])
+            {
+                int ret = dfs(to, min(flow, c));
+                if(ret > 0)
+                {
+                    capacitys[here][to] -= ret;
+                    capacitys[to][here] += ret;
+                    return ret;
+                }
+            }
+        }
+        return 0;
+    }
+
+    int getMaxFlow(int _source, int _sink)
+    {
+        int ret = 0;
+        setFlow(_source, _sink);
+        while(bfs())
+        {
+            fill(work.begin(), work.end(), 0);
+            while(1)
+            {
+                int here = dfs(source, numeric_limits<int>::max());
+                if(here <= 0) break;
+                ret += here;
+            }
+        }
+        return ret;
     }
 };

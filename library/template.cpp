@@ -10,6 +10,7 @@ inline T midpoint(const T& a, const T& b) { return a+(b-a)/2; }
 #define endl '\n'
 // #define int long long
 void solve(int tc);
+void input();
 int32_t main()
 {
     int tc = 1;
@@ -20,9 +21,27 @@ int32_t main()
         cin>>tc;
     #endif
     for(int i=1;i<=tc;++i)
+    {
+        input();
         solve(i);
+    }
+}
+template<typename T>
+istream& operator>>(istream& is, vector<T>& arr) {
+    for(auto& i : arr) is>>i;
+    return is;
+}
+template<typename T>
+ostream& operator<<(ostream& os, vector<T>& arr) {
+    for(auto& i : arr) os<<i<<' ';
+    return os;
 }
 //saigo nankade sonna yume watashi tsuburarinn..
+
+void input()
+{
+    
+}
 
 void solve(int tc)
 {

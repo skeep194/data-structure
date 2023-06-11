@@ -25,7 +25,7 @@ namespace Geometry
     template<typename T>
     T inner_product(const complex<T>& a, const complex<T>& b)
     {
-        return a.X*b.X+a.Y+b.Y;
+        return a.X*b.X+a.Y*b.Y;
     }
 
     template<typename T>
@@ -49,14 +49,15 @@ namespace Geometry
         return make_pair(a.X, a.Y) < make_pair(b.X, b.Y);
     }
 
+    //0: not cross, 1: one cross and point is end of line, 2: one cross and point is not end of line, 3: many cross
     template<typename T>
-    bool line_cross(const pair<complex<T>, complex<T>>& a, const pair<complex<T>, complex<T>>& b)
+    int line_cross(const pair<complex<T>, complex<T>>& a, const pair<complex<T>, complex<T>>& b)
     {
         T cp1 = ccw(a.first, a.second, b.first);
         T cp2 = ccw(a.first, a.second, b.second);
         T cp3 = ccw(b.first, b.second, a.first);
         T cp4 = ccw(b.first, b.second, a.second);
-        if(cp1*cp2 == 0 && cp3*cp4 == 0)
+        if(cp1 == 0 && cp2 == 0 && cp3 == 0 && cp4 == 0)
         {
             pair<T, T> k1 = {a.first.X, a.first.Y};
             pair<T, T> k2 = {a.second.X, a.second.Y};
@@ -64,11 +65,26 @@ namespace Geometry
             pair<T, T> k4 = {b.second.X, b.second.Y};
             if(k1 > k2) swap(k1, k2);
             if(k3 > k4) swap(k3, k4);
-            return k3 <= k2 && k1 <= k4;
+            if(k3 < k2 && k1 < k4)
+            {
+                return 3;
+            }
+            else if(k2 == k3 || k1 == k4)
+            {
+                return 1;
+            }
+            else
+            {
+                return 0;
+            }
         }
-        if(cp1*cp2 <= 0 && cp3*cp4 <= 0)
-            return true;
-        return false;
+        if(cp1*cp2 <= 0 && cp3*cp4 == 0 || cp1*cp2 == 0 && cp3*cp4 <= 0)
+        {
+            return 1;
+        }
+        if(cp1*cp2 < 0 && cp3*cp4 < 0)
+            return 2;
+        return 0;
     }
 
     template <typename T>
