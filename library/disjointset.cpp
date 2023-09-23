@@ -17,6 +17,7 @@ struct disjointset
     {
         x = find(x);
         y = find(y);
+        if(x == y) return;
         parents[y] = x;
         sz[x] += sz[y];
     }
