@@ -83,3 +83,24 @@ namespace pollard
         factors(n/here, arr);
     }
 };
+
+
+long long pi(long long x)
+{
+    long long ret = 1;
+    for(long long i=2;i*i<=x;++i)
+    {
+        long long cnt = 1;
+        while(x % i == 0)
+        {
+            cnt *= i;
+            x /= i;
+        }
+        ret *= cnt-cnt/i;
+    }
+    if(x != 1)
+    {
+        ret *= x-1;
+    }
+    return ret;
+}

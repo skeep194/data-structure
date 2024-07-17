@@ -24,6 +24,12 @@ struct segmentTree
 
     segmentTree(int n, function<T(T, T)> mergeFunction) : segtree(n*2+3), sum(mergeFunction) {}
 
+    T operator[](int i)
+    {
+        return segtree[i+1+segtree.size()/2];
+    }
+
+    //segmentTree[i] = k
     void update(int i, T k)
     {
         i++;
@@ -31,6 +37,12 @@ struct segmentTree
         {
             segtree[i>>1] = sum(segtree[i], segtree[i^1]);
         }
+    }
+
+    //segmentTree[i] = mergeFunction(segmentTree[i], k);
+    void applyAndUpdate(int i, T k)
+    {
+        update(i, sum(i, k));
     }
 
     pair<T, bool> query(int a, int b)
