@@ -26,4 +26,5 @@ ostream &operator<<(ostream &os, vector<T> &arr)
 
 int32_t main()
 {
+    fastio;
 }
